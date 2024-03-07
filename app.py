@@ -1,4 +1,5 @@
-import streamlit as st #importing streamlit and tensorflow
+#importing all the required libraries
+import streamlit as st 
 import tensorflow as tf
 import cv2
 import keras
@@ -17,7 +18,7 @@ def load_model(): #loading our model
   return model
 
 model = load_model()
-#defining the header or title of the page that the user will be seeing
+#defining the header or title of the page that the user will be seeing. We also make a side bar for the web app
 
 st.markdown("<h1 style='text-align: center; color: Black;'>Brain Tumor Classifier</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: Black;'>All you have to do is Upload the MRI scan and the model will do the rest!</h3>", unsafe_allow_html=True)
@@ -34,6 +35,7 @@ st.sidebar.text("The Model was made using a dataset from Kaggle along with using
 file=st.file_uploader("Please upload your MRI Scan",type = ["jpg","png"]) #accepting the image input from the user
 
 def import_and_predict(image_data,model): #our prediction method that will accept the data and the model and would give us a prediction
+  #pre-processing the image before it is fed to the model
   size = (150,150)
   image1 = ImageOps.fit(image_data,size,Image.ANTIALIAS)
   image = ImageOps.grayscale(image1)
@@ -44,9 +46,9 @@ def import_and_predict(image_data,model): #our prediction method that will accep
   prediction = model.predict(img_reshape)
   return prediction
 
-if file is None:
+if file is None: #initial condition when no image has been uploaded by the user
   st.markdown("<h5 style='text-align: center; color: Black;'>Please Upload a File</h5>", unsafe_allow_html=True)
-else:
+else: #condition to give the result once the user has input the image 
   image = Image.open(file)
   st.image(image,use_column_width = True)
   predictions = import_and_predict(image,model)
